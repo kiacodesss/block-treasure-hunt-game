@@ -2,8 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-package my.blocktreasurehunt;
+package my.minehunt;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -25,12 +24,11 @@ import java.awt.Insets;
  * @author Kiana M. Yeo
  * @date February 25, 2026
  */
-public class BlockTreasureHuntUI extends javax.swing.JFrame {
+public class MineHuntUI extends javax.swing.JFrame {
 
     // =========================================================
     // GAME VARIABLES
     // =========================================================
-
     private int[][] symbols = new int[4][4];
 
     /*
@@ -41,7 +39,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
      * 2 = Dirt
      * 3 = Stone
      */
-
     private int treasureCount = 0;
 
     private boolean gameOver = false;
@@ -49,30 +46,28 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     // =========================================================
     // COLORS
     // =========================================================
+    private final Color BACKGROUND
+            = new Color(255, 248, 231);
 
-    private final Color BACKGROUND =
-            new Color(255, 248, 231);
+    private final Color DARK_BROWN
+            = new Color(78, 52, 46);
 
-    private final Color DARK_BROWN =
-            new Color(78, 52, 46);
+    private final Color GREEN
+            = new Color(56, 106, 50);
 
-    private final Color GREEN =
-            new Color(56, 106, 50);
+    private final Color BOARD_BROWN
+            = new Color(121, 85, 72);
 
-    private final Color BOARD_BROWN =
-            new Color(121, 85, 72);
+    private final Color BUTTON_GREEN
+            = new Color(165, 214, 106);
 
-    private final Color BUTTON_GREEN =
-            new Color(165, 214, 106);
-
-    private final Color TEAL =
-            new Color(37, 125, 120);
+    private final Color TEAL
+            = new Color(37, 125, 120);
 
     // =========================================================
     // CONSTRUCTOR
     // =========================================================
-
-    public BlockTreasureHuntUI() {
+    public MineHuntUI() {
 
         initComponents();
 
@@ -90,12 +85,23 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     }
 
     // =========================================================
-    // CREATE / RANDOMIZE GAME BOARD
-    // =========================================================
-
+// CREATE / RANDOMIZE GAME BOARD
+// =========================================================
     private void initSymbols() {
 
-        // Clear the entire board first
+        /*
+     * 16 total blocks:
+     *
+     * 13 = Treasure
+     *  1 = TNT
+     *  1 = Dirt
+     *  1 = Stone
+     *
+     * The positions of all blocks are randomized.
+         */
+        // -----------------------------------------------------
+        // RESET THE ENTIRE BOARD TO TREASURE
+        // -----------------------------------------------------
         for (int row = 0; row < 4; row++) {
 
             for (int col = 0; col < 4; col++) {
@@ -104,55 +110,71 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
             }
         }
 
-        /*
-         * We need exactly 3 danger blocks.
-         *
-         * 16 total blocks
-         * - 3 danger blocks
-         * = 13 treasure blocks
-         */
+        // -----------------------------------------------------
+        // PLACE EXACTLY 1 TNT
+        // -----------------------------------------------------
+        int tntRow;
+        int tntCol;
 
-        int dangerPlaced = 0;
+        do {
 
-        while (dangerPlaced < 3) {
+            tntRow
+                    = (int) (Math.random() * 4);
 
-            int row =
-                    (int) (Math.random() * 4);
+            tntCol
+                    = (int) (Math.random() * 4);
 
-            int col =
-                    (int) (Math.random() * 4);
+        } while (symbols[tntRow][tntCol] != 0);
 
-            // Only place danger on an empty space
-            if (symbols[row][col] == 0) {
+        symbols[tntRow][tntCol] = 1;
 
-                /*
-                 * Randomly choose:
-                 *
-                 * 1 = TNT
-                 * 2 = Dirt
-                 * 3 = Stone
-                 */
+        // -----------------------------------------------------
+        // PLACE EXACTLY 1 DIRT
+        // -----------------------------------------------------
+        int dirtRow;
+        int dirtCol;
 
-                symbols[row][col] =
-                        1 + (int) (Math.random() * 3);
+        do {
 
-                dangerPlaced++;
-            }
-        }
+            dirtRow
+                    = (int) (Math.random() * 4);
+
+            dirtCol
+                    = (int) (Math.random() * 4);
+
+        } while (symbols[dirtRow][dirtCol] != 0);
+
+        symbols[dirtRow][dirtCol] = 2;
+
+        // -----------------------------------------------------
+        // PLACE EXACTLY 1 STONE
+        // -----------------------------------------------------
+        int stoneRow;
+        int stoneCol;
+
+        do {
+
+            stoneRow
+                    = (int) (Math.random() * 4);
+
+            stoneCol
+                    = (int) (Math.random() * 4);
+
+        } while (symbols[stoneRow][stoneCol] != 0);
+
+        symbols[stoneRow][stoneCol] = 3;
     }
 
     // =========================================================
     // SETUP GAME UI
     // =========================================================
-
     private void setupGameUI() {
 
         // =====================================================
         // MAIN PANEL
         // =====================================================
-
-        JPanel mainPanel =
-                new JPanel(
+        JPanel mainPanel
+                = new JPanel(
                         new BorderLayout(15, 15)
                 );
 
@@ -170,9 +192,8 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // HEADER
         // =====================================================
-
-        JPanel customHeaderPanel =
-                new JPanel(
+        JPanel customHeaderPanel
+                = new JPanel(
                         new BorderLayout(5, 5)
                 );
 
@@ -183,9 +204,8 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // TITLE
         // -----------------------------------------------------
-
         titleLabel.setText(
-                "⛏ BLOCK TREASURE HUNT ⛏"
+                "⛏ MINE HUNT ⛏"
         );
 
         titleLabel.setHorizontalAlignment(
@@ -196,7 +216,7 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
                 new Font(
                         "Monospaced",
                         Font.BOLD,
-                        30
+                        38
                 )
         );
 
@@ -205,9 +225,8 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // SUBTITLE
         // -----------------------------------------------------
-
         subtitleLabel.setText(
-                "Find the treasures. Avoid the danger blocks!"
+                "Find all 13 treasures. Avoid the TNT blocks!"
         );
 
         subtitleLabel.setHorizontalAlignment(
@@ -229,7 +248,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // TREASURE COUNTER
         // -----------------------------------------------------
-
         treasureLabel.setText(
                 "💎 TREASURES: 0 / 13"
         );
@@ -251,9 +269,8 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // HEADER CONTAINER
         // -----------------------------------------------------
-
-        JPanel titleContainer =
-                new JPanel(
+        JPanel titleContainer
+                = new JPanel(
                         new BorderLayout(5, 5)
                 );
 
@@ -284,7 +301,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // GAME BOARD
         // =====================================================
-
         boardPanel.setLayout(
                 new GridLayout(
                         4,
@@ -300,12 +316,10 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
 
         boardPanel.setBorder(
                 BorderFactory.createCompoundBorder(
-
                         BorderFactory.createLineBorder(
                                 DARK_BROWN,
                                 3
                         ),
-
                         BorderFactory.createEmptyBorder(
                                 10,
                                 10,
@@ -318,24 +332,19 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // GAME BUTTONS
         // =====================================================
-
         JButton[] buttons = {
-
             jButton1,
             jButton2,
             jButton3,
             jButton4,
-
             jButton5,
             jButton6,
             jButton7,
             jButton8,
-
             jButton9,
             jButton10,
             jButton11,
             jButton12,
-
             jButton13,
             jButton14,
             jButton15,
@@ -345,7 +354,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // STYLE EACH BUTTON
         // =====================================================
-
         for (JButton button : buttons) {
 
             styleGameButton(button);
@@ -357,7 +365,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
          * Each button is now connected to a specific
          * row and column on the symbols[][] board.
          */
-
         jButton1.addActionListener(
                 e -> clicked(0, 0, jButton1)
         );
@@ -425,7 +432,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // ADD BUTTONS TO BOARD
         // =====================================================
-
         for (JButton button : buttons) {
 
             boardPanel.add(button);
@@ -434,7 +440,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // STATUS LABEL
         // =====================================================
-
         statusLabel.setText(
                 "⛏ Dig carefully! Good luck!"
         );
@@ -458,7 +463,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // NEW GAME BUTTON
         // =====================================================
-
         jButton17.setText(
                 "↻ NEW GAME"
         );
@@ -491,10 +495,8 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         );
 
         // Remove any old generated listeners
-        for (
-                java.awt.event.ActionListener listener
-                : jButton17.getActionListeners()
-        ) {
+        for (java.awt.event.ActionListener listener
+                : jButton17.getActionListeners()) {
 
             jButton17.removeActionListener(listener);
         }
@@ -507,7 +509,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // CREATOR LABEL
         // =====================================================
-
         jLabel1.setText(
                 "made by kiacodesss"
         );
@@ -529,7 +530,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // BOTTOM PANEL
         // =====================================================
-
         bottomPanel.setLayout(
                 new BorderLayout(5, 10)
         );
@@ -556,7 +556,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // ASSEMBLE UI
         // =====================================================
-
         mainPanel.add(
                 customHeaderPanel,
                 BorderLayout.NORTH
@@ -575,7 +574,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // REPLACE ORIGINAL GUI BUILDER CONTENT
         // =====================================================
-
         getContentPane().removeAll();
 
         getContentPane().setLayout(
@@ -595,7 +593,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     // =========================================================
     // STYLE GAME BUTTON
     // =========================================================
-
     private void styleGameButton(
             JButton button
     ) {
@@ -653,10 +650,9 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         );
     }
 
-    // =========================================================
-    // BUTTON CLICK LOGIC
-    // =========================================================
-
+// =========================================================
+// BUTTON CLICK LOGIC
+// =========================================================
     private void clicked(
             int row,
             int col,
@@ -666,93 +662,86 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // SAFETY CHECK
         // -----------------------------------------------------
-
         if (gameOver) {
-
             return;
         }
 
         if (!button.isEnabled()) {
-
             return;
         }
 
         // -----------------------------------------------------
         // CHECK WHAT IS UNDER THE BLOCK
         // -----------------------------------------------------
-
-        int blockType =
-                symbols[row][col];
+        int blockType = symbols[row][col];
 
         String imagePath;
 
         // =====================================================
-        // DANGER BLOCK
+        // TNT - GAME OVER
         // =====================================================
+        if (blockType == 1) {
 
-        if (blockType != 0) {
+            imagePath = "/resources/tnt.png";
 
-            // -------------------------------------------------
-            // TNT
-            // -------------------------------------------------
+            showImage(
+                    button,
+                    imagePath
+            );
 
-            if (blockType == 1) {
-
-                imagePath =
-                        "/resources/tnt.png";
-            }
-
-            // -------------------------------------------------
-            // DIRT
-            // -------------------------------------------------
-
-            else if (blockType == 2) {
-
-                imagePath =
-                        "/resources/dirt.png";
-            }
-
-            // -------------------------------------------------
-            // STONE
-            // -------------------------------------------------
-
-            else {
-
-                imagePath =
-                        "/resources/stone.png";
-            }
-
-            // -------------------------------------------------
-            // REVEAL DANGER
-            // -------------------------------------------------
-
-            boolean imageShown =
-                    showImage(
-                            button,
-                            imagePath
-                    );
-
-            // Even if image is missing,
-            // the game should still end.
             gameOver = true;
 
             statusLabel.setText(
-                    "💥 BOOM! You found a danger block!"
+                    "💥 BOOM! You found TNT!"
             );
 
-            // Disable every remaining button
             disableBoard();
 
             JOptionPane.showMessageDialog(
                     this,
-
                     "💥 OH NO!\n\n"
-                    + "You uncovered a dangerous block!\n"
+                    + "You uncovered TNT!\n"
                     + "Better luck next time!",
-
                     "GAME OVER",
-
                     JOptionPane.INFORMATION_MESSAGE
+            );
+
+            return;
+        }
+
+        // =====================================================
+        // DIRT - NEUTRAL BLOCK
+        // =====================================================
+        if (blockType == 2) {
+
+            imagePath = "/resources/dirt.png";
+
+            showImage(
+                    button,
+                    imagePath
+            );
+
+            statusLabel.setText(
+                    "🟫 Just dirt! Keep digging!"
+            );
+
+            return;
+        }
+
+        // =====================================================
+        // STONE - NEUTRAL BLOCK
+        // =====================================================
+        if (blockType == 3) {
+
+            imagePath = "/resources/stone.png";
+
+            showImage(
+                    button,
+                    imagePath
+            );
+
+            statusLabel.setText(
+                    "🪨 Just stone! Keep digging!"
             );
 
             return;
@@ -761,47 +750,41 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // TREASURE
         // =====================================================
-
         treasureCount++;
 
         // -----------------------------------------------------
-        // RANDOM TREASURE
+        // RANDOM TREASURE TYPE
         // -----------------------------------------------------
-
-        int treasureType =
-                (int) (Math.random() * 3);
+        int treasureType
+                = (int) (Math.random() * 3);
 
         if (treasureType == 0) {
 
-            imagePath =
-                    "/resources/diamond.png";
-        }
+            imagePath
+                    = "/resources/diamond.png";
 
-        else if (treasureType == 1) {
+        } else if (treasureType == 1) {
 
-            imagePath =
-                    "/resources/gold.png";
-        }
+            imagePath
+                    = "/resources/gold.png";
 
-        else {
+        } else {
 
-            imagePath =
-                    "/resources/emerald.png";
+            imagePath
+                    = "/resources/emerald.png";
         }
 
         // -----------------------------------------------------
         // REVEAL TREASURE
         // -----------------------------------------------------
-
         showImage(
                 button,
                 imagePath
         );
 
         // -----------------------------------------------------
-        // UPDATE COUNTER
+        // UPDATE TREASURE COUNTER
         // -----------------------------------------------------
-
         treasureLabel.setText(
                 "💎 TREASURES: "
                 + treasureCount
@@ -811,7 +794,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // UPDATE STATUS
         // -----------------------------------------------------
-
         statusLabel.setText(
                 "✨ Treasure found! Keep digging!"
         );
@@ -819,7 +801,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // =====================================================
         // WIN CONDITION
         // =====================================================
-
         if (treasureCount == 13) {
 
             gameOver = true;
@@ -832,13 +813,10 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(
                     this,
-
                     "🏆 CONGRATULATIONS! 🏆\n\n"
                     + "You found all 13 treasures!\n"
                     + "You are a master treasure hunter!",
-
                     "YOU WIN!",
-
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
@@ -847,7 +825,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     // =========================================================
     // SHOW IMAGE
     // =========================================================
-
     private boolean showImage(
             JButton button,
             String imagePath
@@ -857,29 +834,24 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
          * getResource() looks inside the project's
          * compiled resources.
          */
-
-        java.net.URL imageURL =
-                getClass().getResource(
+        java.net.URL imageURL
+                = getClass().getResource(
                         imagePath
                 );
 
         // -----------------------------------------------------
         // IMAGE NOT FOUND
         // -----------------------------------------------------
-
         if (imageURL == null) {
 
             JOptionPane.showMessageDialog(
                     this,
-
                     "Could not find image:\n\n"
                     + imagePath
                     + "\n\n"
                     + "Make sure the image is inside:\n"
                     + "src/main/resources/resources/",
-
                     "IMAGE NOT FOUND",
-
                     JOptionPane.ERROR_MESSAGE
             );
 
@@ -889,33 +861,30 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // LOAD IMAGE
         // -----------------------------------------------------
+        ImageIcon icon
+                = new ImageIcon(imageURL);
 
-        ImageIcon icon =
-                new ImageIcon(imageURL);
-
-        Image image =
-                icon.getImage();
+        Image image
+                = icon.getImage();
 
         // -----------------------------------------------------
         // SCALE IMAGE
         // -----------------------------------------------------
-
-        Image scaledImage =
-                image.getScaledInstance(
+        Image scaledImage
+                = image.getScaledInstance(
                         64,
                         64,
                         Image.SCALE_SMOOTH
                 );
 
-        ImageIcon scaledIcon =
-                new ImageIcon(
+        ImageIcon scaledIcon
+                = new ImageIcon(
                         scaledImage
                 );
 
         // -----------------------------------------------------
         // DISPLAY IMAGE
         // -----------------------------------------------------
-
         button.setIcon(
                 scaledIcon
         );
@@ -935,7 +904,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // PREVENT CLICKING AGAIN
         // -----------------------------------------------------
-
         button.setEnabled(false);
 
         return true;
@@ -944,26 +912,21 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     // =========================================================
     // DISABLE BOARD
     // =========================================================
-
     private void disableBoard() {
 
         JButton[] buttons = {
-
             jButton1,
             jButton2,
             jButton3,
             jButton4,
-
             jButton5,
             jButton6,
             jButton7,
             jButton8,
-
             jButton9,
             jButton10,
             jButton11,
             jButton12,
-
             jButton13,
             jButton14,
             jButton15,
@@ -979,13 +942,11 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
     // =========================================================
     // RESET GAME
     // =========================================================
-
     private void resetGame() {
 
         // -----------------------------------------------------
         // RESET VARIABLES
         // -----------------------------------------------------
-
         treasureCount = 0;
 
         gameOver = false;
@@ -993,30 +954,24 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // CREATE NEW RANDOM BOARD
         // -----------------------------------------------------
-
         initSymbols();
 
         // -----------------------------------------------------
         // GET ALL BUTTONS
         // -----------------------------------------------------
-
         JButton[] buttons = {
-
             jButton1,
             jButton2,
             jButton3,
             jButton4,
-
             jButton5,
             jButton6,
             jButton7,
             jButton8,
-
             jButton9,
             jButton10,
             jButton11,
             jButton12,
-
             jButton13,
             jButton14,
             jButton15,
@@ -1026,7 +981,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // RESET EVERY BUTTON
         // -----------------------------------------------------
-
         for (JButton button : buttons) {
 
             button.setIcon(null);
@@ -1058,7 +1012,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // RESET TREASURE COUNTER
         // -----------------------------------------------------
-
         treasureLabel.setText(
                 "💎 TREASURES: 0 / 13"
         );
@@ -1066,7 +1019,6 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         // -----------------------------------------------------
         // RESET STATUS
         // -----------------------------------------------------
-
         statusLabel.setText(
                 "⛏ Dig carefully! Good luck!"
         );
@@ -1134,7 +1086,7 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
         titleLabel.setFont(new java.awt.Font("Monospaced", 1, 30)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(56, 106, 50));
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        titleLabel.setText("⛏ BLOCK TREASURE HUNT ⛏");
+        titleLabel.setText("⛏ MINE HUNT ⛏");
         headerPanel.add(titleLabel);
 
         subtitleLabel.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
@@ -1233,7 +1185,7 @@ public class BlockTreasureHuntUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    new BlockTreasureHuntUI().setVisible(true);
+        new MineHuntUI().setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
